@@ -8,12 +8,12 @@
 
 #import "ViewController.h"
 #import "Manager.h"
+#import "TableItem.h"
+
 
 @interface ViewController()<NSTableViewDataSource,NSTableViewDataSource>
 @property (weak) IBOutlet NSTextFieldCell *tf_job_id;
 @property (weak) IBOutlet NSTableView *tb_stats;
-
-
 @property (strong,nonatomic) NSMutableArray* datasource;
 @end
 
@@ -54,27 +54,19 @@
 }
 
 - (IBAction)click_add:(id)sender {
+    [[Manager sharedManager] addURL: self.tf_job_id.stringValue];
   
+    self.tf_job_id.stringValue = @"";
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.datasource = [NSMutableArray new];
-//  for (NSInteger i=0; i<10; i++) {
-//    NSDictionary*d = @{
-//                       @"first":@"first",
-//                       @"second":@"second",
-//                       };
-//
-//    [self.datasource addObject:d];
-//  }
 }
 
 
 - (void)setRepresentedObject:(id)representedObject {
   [super setRepresentedObject:representedObject];
-
-  // Update the view, if already loaded.
 }
 
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
@@ -82,32 +74,25 @@
 }
 
 
-/*
- JSON
- _class : "hudson.model.FreeStyleBuild"
- actions
- artifacts
- building : false
- description : null
- displayName : "#455"
- duration : 8364580
- estimatedDuration : 8369662
- executor : null
- fullDisplayName : "App #455"
- id : "455"
- keepLog : false
- number : 455
- queueId : 565
- result : "SUCCESS"
- timestamp : 1537450518959
- url : "URL/job/App/455/"
- builtOn : "macbuild1"
- changeSet
- culprits
- 
- */
 -(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+  TableItem*item = self.datasource[row];
   NSString* key=[tableColumn identifier];
-  return [self.datasource[row] objectForKey:@"fullDisplayName"];
+  if ([key isEqualToString:@"cell_status"]) {
+    return [item getIcon];
+  }
+  else if ([key isEqualToString:@"cell_job"]) {
+    return item.fullDisplayName;
+  }
+  else if ([key isEqualToString:@"cell_timestamp"]) {
+    return item.timestamp;
+  }
+  else if ([key isEqualToString:@"cell_duration"]) {
+    return item.duration;
+  }
+  else if ([key isEqualToString:@"cell_id"]) {
+    return item.buildID;
+  }
+  
+  return @"NaN";
 }
 @end

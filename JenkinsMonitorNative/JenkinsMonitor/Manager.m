@@ -7,9 +7,12 @@
 //
 
 #import "Manager.h"
+#import "TableItem.h"
 
 NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 NSString * const userKey = @"jenkinsMonitorSave";
+
+NSTimeInterval const updateInterval = 60*3;
 
 @interface Manager()
 
@@ -31,21 +34,27 @@ NSString * const userKey = @"jenkinsMonitorSave";
 - (id)init {
   if (self = [super init]) {
     self.jobList = [NSMutableDictionary new];
-//    self.datasource = [NSMutableArray new];
+    [self startService];
   }
   return self;
 }
 
--(void)addURL:(NSString*)url{
-  [self.jobList setObject:[NSDictionary dictionary] forKey:url];
+-(void)load{
+  NSArray *list = [[NSUserDefaults standardUserDefaults] objectForKey:userKey];
+  for (NSString*url in list) {
+    [self addURL:url];
+  }
+  [self timerFire:nil];
 }
-//
-//-(void)addWorkerWithID:(NSString*)jobID{
-//  [self.jobList setObject:[NSDictionary dictionary] forKey:jobID];
-//}
+
+-(void)addURL:(NSString*)url{
+  if (url && [url isNotEqualTo:@""]) {
+    [self.jobList setObject:[TableItem new] forKey:url];
+  }
+}
 
 -(void)startService {
-  NSTimer * timer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(timerFire:) userInfo:nil repeats:YES];
+  NSTimer * timer = [NSTimer timerWithTimeInterval:updateInterval target:self selector:@selector(timerFire:) userInfo:nil repeats:YES];
   [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
   [timer fire];
 }
@@ -93,7 +102,7 @@ NSString * const userKey = @"jenkinsMonitorSave";
  keepLog : false
  number : 455
  queueId : 565
- result : "SUCCESS"
+ result : "SUCCESS", "ABORTED", "FAILURE", null = Building
  timestamp : 1537450518959
  url : "URL/job/App/455/"
  builtOn : "macbuild1"
@@ -107,39 +116,32 @@ NSString * const userKey = @"jenkinsMonitorSave";
                                                              options: NSJSONReadingMutableContainers
                                                                error:&e];
   if (resultDict) {
-//    if ([key isEqualToString:@"lastBuild"]) {
-//      [self.jobList removeObjectForKey: key];
-//      NSNumber *buildID = [resultDict objectForKey:@"id"];
-//      [self.jobList setObject:resultDict forKey:buildID];
-//      NSInteger index = [buildID integerValue];
-//      for (NSInteger i=index; i>0 && i>index-5; i--) {
-//        [self addWorkerWithID: [@(i) stringValue]];
-//      }
-//    } else {
-      [self.jobList setObject:resultDict forKey:job_url];
-//    }
     
-//    if ([[self.jobList allKeys] count] == 1 || [[self.jobList allKeys] indexOfObject: key]== 0) {
+    TableItem*item = [TableItem new];
+    item.buildID = [resultDict objectForKey:@"number"];
+    item.result = [resultDict objectForKey:@"result"];
+    item.duration = [resultDict objectForKey:@"duration"];
+    item.timestamp = [resultDict objectForKey:@"timestamp"];
+    item.fullDisplayName = [resultDict objectForKey:@"fullDisplayName"];
+
+    [self.jobList setObject:item forKey:job_url];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
       [[NSNotificationCenter defaultCenter] postNotificationName:JobsUpdateNotification object:self];
-//    }
-    
-//    NSString *status = [resultDict objectForKey:@"result"];
-//    BOOL buildingStatus = [[resultDict objectForKey :@"building"] boolValue];
-//    NSNumber *buildID = [resultDict objectForKey:@"id"];
-//    NSNumber *duration = [resultDict objectForKey:@"duration"];
-//    NSNumber *timestamp = [resultDict objectForKey:@"timestamp"];
-//    NSLog(@"STATUS: %@", status);
+    });
   }
 }
 
-- (void) dealloc {
-//  NSArray*list=self.jobList
-//  [[NSUserDefaults standardUserDefaults] setObject:valueToSave forKey:userKey];
-//  [[NSUserDefaults standardUserDefaults] synchronize];
-  
+- (void) save{
+  NSArray*list=[self.jobList allKeys];
+  if ([list count]>0) {
+    [[NSUserDefaults standardUserDefaults] setObject:list forKey:userKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+}
+
+- (void)dealloc {
   self.jobList = nil;
-//  self.datasource = nil;
-//  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

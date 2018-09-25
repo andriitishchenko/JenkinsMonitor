@@ -15,6 +15,8 @@
 		4A4FD8DE21542B4800011353 /* icon_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4FD8DD21542B4700011353 /* icon_menu@2x.png */; };
 		4A4FD8E021542B5100011353 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A4FD8DF21542B5100011353 /* icon.png */; };
 		4A4FD8E321545E2900011353 /* Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4FD8E221545E2900011353 /* Manager.m */; };
+		4AAF03B2215AC6430074E67C /* TableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AAF03B1215AC6430074E67C /* TableItem.m */; };
+		4AAF03B5215AD0170074E67C /* CircleImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AAF03B4215AD0170074E67C /* CircleImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		4A4FD8DF21542B5100011353 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		4A4FD8E121545E2900011353 /* Manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manager.h; sourceTree = "<group>"; };
 		4A4FD8E221545E2900011353 /* Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Manager.m; sourceTree = "<group>"; };
+		4AAF03B0215AC6430074E67C /* TableItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableItem.h; sourceTree = "<group>"; };
+		4AAF03B1215AC6430074E67C /* TableItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableItem.m; sourceTree = "<group>"; };
+		4AAF03B3215AD0170074E67C /* CircleImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CircleImage.h; sourceTree = "<group>"; };
+		4AAF03B4215AD0170074E67C /* CircleImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CircleImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +72,8 @@
 			children = (
 				4A4FD8DF21542B5100011353 /* icon.png */,
 				4A4FD8DD21542B4700011353 /* icon_menu@2x.png */,
+				4AAF03B0215AC6430074E67C /* TableItem.h */,
+				4AAF03B1215AC6430074E67C /* TableItem.m */,
 				4A4FD8C921542A6100011353 /* AppDelegate.h */,
 				4A4FD8CA21542A6100011353 /* AppDelegate.m */,
 				4A4FD8E121545E2900011353 /* Manager.h */,
@@ -77,6 +85,8 @@
 				4A4FD8D421542A6200011353 /* Info.plist */,
 				4A4FD8D521542A6200011353 /* main.m */,
 				4A4FD8D721542A6200011353 /* JenkinsMonitor.entitlements */,
+				4AAF03B3215AD0170074E67C /* CircleImage.h */,
+				4AAF03B4215AD0170074E67C /* CircleImage.m */,
 			);
 			path = JenkinsMonitor;
 			sourceTree = "<group>";
@@ -161,6 +171,8 @@
 				4A4FD8CE21542A6100011353 /* ViewController.m in Sources */,
 				4A4FD8D621542A6200011353 /* main.m in Sources */,
 				4A4FD8CB21542A6100011353 /* AppDelegate.m in Sources */,
+				4AAF03B5215AD0170074E67C /* CircleImage.m in Sources */,
+				4AAF03B2215AC6430074E67C /* TableItem.m in Sources */,
 				4A4FD8E321545E2900011353 /* Manager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -27,14 +27,12 @@
   _statusItem.toolTip = @"ctrl+click to QUIT";
   
   NSImage *icon = [NSImage imageNamed:@"icon_menu"];
-  icon.template = YES;
+//  icon.template = YES;
 
   self.statusItem.button.image = icon;
-//  _statusItem.toolTip = @"ctrl+click to QUIT";
   [self.statusItem setAction:@selector(itemClicked:)];
   
-//  [[Manager sharedManager] setJobID: @"AppID"];
-//  [[Manager sharedManager] startService];
+  [[Manager sharedManager] load];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(receiveNotification:)
@@ -49,6 +47,7 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
+  [[Manager sharedManager] save];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   // Insert code here to tear down your application
 }
