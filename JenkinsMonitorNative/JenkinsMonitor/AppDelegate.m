@@ -47,7 +47,6 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-  [[Manager sharedManager] save];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   // Insert code here to tear down your application
 }

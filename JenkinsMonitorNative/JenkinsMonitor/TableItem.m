@@ -21,7 +21,7 @@
   self.fullDisplayName=@"";
   self.timestamp=@(0);
   self.duration=@(0);
-  self.result=@"";
+  self.result=nil;
   return self;
 }
 
@@ -47,7 +47,10 @@
 
 - (const NSImage*) getIcon {
   NSColor*c;
-  if ([self.result isEqualToString:@"SUCCESS"]) {
+  if([self.result isEqual:[NSNull null]]){
+    c = [NSColor blueColor];
+  }
+  else if ([self.result isEqualToString:@"SUCCESS"]) {
     c = [NSColor greenColor];
   }
   else if ([self.result isEqualToString:@"ABORTED"]) {

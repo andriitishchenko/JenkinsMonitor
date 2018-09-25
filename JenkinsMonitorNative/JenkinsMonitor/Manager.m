@@ -44,13 +44,18 @@ NSTimeInterval const updateInterval = 60*3;
   for (NSString*url in list) {
     [self addURL:url];
   }
-  [self timerFire:nil];
 }
 
 -(void)addURL:(NSString*)url{
   if (url && [url isNotEqualTo:@""]) {
     [self.jobList setObject:[TableItem new] forKey:url];
+    [self requestData:url];
   }
+}
+-(void)removeURLIndex:(NSInteger)index{
+  NSString* keyURL = [[self.jobList allKeys] objectAtIndex:index];
+  [self.jobList removeObjectForKey:keyURL];
+  [self save];
 }
 
 -(void)startService {

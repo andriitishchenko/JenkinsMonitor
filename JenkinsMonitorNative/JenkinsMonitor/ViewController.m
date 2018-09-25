@@ -9,9 +9,10 @@
 #import "ViewController.h"
 #import "Manager.h"
 #import "TableItem.h"
+#import "NSTableView+ContextMenu.h"
 
 
-@interface ViewController()<NSTableViewDataSource,NSTableViewDataSource>
+@interface ViewController()<NSTableViewDataSource,NSTableViewDataSource,ContextMenuDelegate>
 @property (weak) IBOutlet NSTextFieldCell *tf_job_id;
 @property (weak) IBOutlet NSTableView *tb_stats;
 @property (strong,nonatomic) NSMutableArray* datasource;
@@ -55,9 +56,15 @@
 
 - (IBAction)click_add:(id)sender {
     [[Manager sharedManager] addURL: self.tf_job_id.stringValue];
-  
+    [[Manager sharedManager] save];
     self.tf_job_id.stringValue = @"";
 }
+
+- (IBAction)removeSelectedRow:(id)sender {
+  [[Manager sharedManager] removeURLIndex:self.tb_stats.selectedRow];
+  [self resetValues];
+}
+
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -95,4 +102,9 @@
   
   return @"NaN";
 }
+
+- (NSMenu*)tableView:(NSTableView*)aTableView menuForRows:(NSIndexSet*)rows{
+  return aTableView.menu;
+}
+
 @end

@@ -138,6 +138,7 @@
                                             <connections>
                                                 <outlet property="dataSource" destination="XfG-lQ-9wD" id="FSm-vH-l5D"/>
                                                 <outlet property="delegate" destination="XfG-lQ-9wD" id="enB-GC-nS1"/>
+                                                <outlet property="menu" destination="zCj-i4-URF" id="hAQ-IM-Q7b"/>
                                             </connections>
                                         </tableView>
                                     </subviews>
@@ -175,6 +176,19 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <userDefaultsController representsSharedInstance="YES" id="1e6-ot-Zs3"/>
+                <menu id="zCj-i4-URF">
+                    <items>
+                        <menuItem title="Remove" id="lAd-8S-hHj">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="removeSelectedRow:" target="XfG-lQ-9wD" id="2zW-mo-4ad"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                    <connections>
+                        <outlet property="delegate" destination="XfG-lQ-9wD" id="Zdi-6x-kmZ"/>
+                    </connections>
+                </menu>
             </objects>
             <point key="canvasLocation" x="206.5" y="228"/>
         </scene>

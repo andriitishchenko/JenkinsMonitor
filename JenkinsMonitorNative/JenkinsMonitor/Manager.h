@@ -18,4 +18,5 @@ extern NSString * const JobsUpdateNotification;
 - (void) load;
 
 -(void)addURL:(NSString*)url;
+-(void)removeURLIndex:(NSInteger)index;
 @end
