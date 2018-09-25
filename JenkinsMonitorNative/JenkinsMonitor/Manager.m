@@ -9,11 +9,12 @@
 #import "Manager.h"
 
 NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
+NSString * const userKey = @"jenkinsMonitorSave";
 
 @interface Manager()
-@property(strong,nonatomic) NSMutableDictionary* jobList;
+
 - (void)timerFire:(id)sender;
--(void)parceAndSave:(NSData*)data forKey:(NSString*)key;
+- (void)parceAndSave:(NSData*)data forKey:(NSString*)key;
 @end
 
 
@@ -29,14 +30,19 @@ NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 
 - (id)init {
   if (self = [super init]) {
-    self.datasource = [NSMutableArray new];
+    self.jobList = [NSMutableDictionary new];
+//    self.datasource = [NSMutableArray new];
   }
   return self;
 }
 
--(void)addWorkerWithID:(NSString*)jobID{
-  [self.jobList setObject:[NSDictionary dictionary] forKey:jobID];
+-(void)addURL:(NSString*)url{
+  [self.jobList setObject:[NSDictionary dictionary] forKey:url];
 }
+//
+//-(void)addWorkerWithID:(NSString*)jobID{
+//  [self.jobList setObject:[NSDictionary dictionary] forKey:jobID];
+//}
 
 -(void)startService {
   NSTimer * timer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(timerFire:) userInfo:nil repeats:YES];
@@ -49,34 +55,23 @@ NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
   NSDictionary* list = [self.jobList copy];
   
   if ([list count] == 0) {
-    [self requestData:@"lastBuild"];
+    return;
   }
   
   [list enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
-    if ([[value allKeys] count] == 0) {
       [self requestData:key];
-    }
-    else{
-      BOOL buildingStatus = [[value objectForKey :@"building"] boolValue];
-      if (buildingStatus) {
-          [self requestData:key];
-      }
-    }
   }];
 }
 
--(void)requestData:(NSString*)key {
-  if (!self.jobID) {
-    return;
-  }
-  NSString* functionURL = [NSString stringWithFormat: @"%@/job/%@/%@/api/json",@"url", self.jobID, key];
+-(void)requestData:(NSString*)job_url {
+  NSString* functionURL = [NSString stringWithFormat: @"%@/lastBuild/api/json",job_url];
   NSURL *url = [NSURL URLWithString:functionURL];
   NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url
                                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                              if (error) {
                                                                NSLog(@"Error: %@",error);
                                                              } else {
-                                                               [self parceAndSave:data forKey:key];
+                                                               [self parceAndSave:data forKey:job_url];
                                                              }
                                                            }];
   [task resume];
@@ -106,27 +101,27 @@ NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
  culprits
  
  */
--(void)parceAndSave:(NSData*)data forKey:(NSString*)key {
+-(void)parceAndSave:(NSData*)data forKey:(NSString*)job_url {
   NSError *e = nil;
   NSDictionary *resultDict = [NSJSONSerialization JSONObjectWithData: data
                                                              options: NSJSONReadingMutableContainers
                                                                error:&e];
   if (resultDict) {
-    if ([key isEqualToString:@"lastBuild"]) {
-      [self.jobList removeObjectForKey: key];
-      NSNumber *buildID = [resultDict objectForKey:@"id"];
-      [self.jobList setObject:resultDict forKey:buildID];
-      NSInteger index = [buildID integerValue];
-      for (NSInteger i=index; i>0 && i>index-5; i--) {
-        [self addWorkerWithID: [@(i) stringValue]];
-      }
-    } else {
-      [self.jobList setObject:resultDict forKey:key];
-    }
+//    if ([key isEqualToString:@"lastBuild"]) {
+//      [self.jobList removeObjectForKey: key];
+//      NSNumber *buildID = [resultDict objectForKey:@"id"];
+//      [self.jobList setObject:resultDict forKey:buildID];
+//      NSInteger index = [buildID integerValue];
+//      for (NSInteger i=index; i>0 && i>index-5; i--) {
+//        [self addWorkerWithID: [@(i) stringValue]];
+//      }
+//    } else {
+      [self.jobList setObject:resultDict forKey:job_url];
+//    }
     
-    if ([[self.jobList allKeys] count] == 1 || [[self.jobList allKeys] indexOfObject: key]== 0) {
+//    if ([[self.jobList allKeys] count] == 1 || [[self.jobList allKeys] indexOfObject: key]== 0) {
       [[NSNotificationCenter defaultCenter] postNotificationName:JobsUpdateNotification object:self];
-    }
+//    }
     
 //    NSString *status = [resultDict objectForKey:@"result"];
 //    BOOL buildingStatus = [[resultDict objectForKey :@"building"] boolValue];
@@ -138,9 +133,13 @@ NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 }
 
 - (void) dealloc {
+//  NSArray*list=self.jobList
+//  [[NSUserDefaults standardUserDefaults] setObject:valueToSave forKey:userKey];
+//  [[NSUserDefaults standardUserDefaults] synchronize];
+  
   self.jobList = nil;
-  self.datasource = nil;
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+//  self.datasource = nil;
+//  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

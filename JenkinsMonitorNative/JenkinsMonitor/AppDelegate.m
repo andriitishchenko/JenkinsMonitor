@@ -33,8 +33,8 @@
 //  _statusItem.toolTip = @"ctrl+click to QUIT";
   [self.statusItem setAction:@selector(itemClicked:)];
   
-  [[Manager sharedManager] setJobID: @"AppID"];
-  [[Manager sharedManager] startService];
+//  [[Manager sharedManager] setJobID: @"AppID"];
+//  [[Manager sharedManager] startService];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(receiveNotification:)

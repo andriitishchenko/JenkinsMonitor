@@ -11,8 +11,9 @@
 extern NSString * const JobsUpdateNotification;
 
 @interface Manager : NSObject
-@property(strong,nonatomic) NSString* jobID;
-@property(strong,nonatomic) NSMutableArray* datasource;
+@property(strong,nonatomic) NSMutableDictionary* jobList;
 + (Manager*) sharedManager;
 - (void) startService;
+
+-(void)addURL:(NSString*)url;
 @end
