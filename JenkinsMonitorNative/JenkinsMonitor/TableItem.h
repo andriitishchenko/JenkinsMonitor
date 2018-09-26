@@ -10,7 +10,7 @@
 
 @interface TableItem : NSObject
 @property(copy,nonatomic) NSString*result;
-@property(copy,nonatomic) NSString*buildID;
+@property(copy,nonatomic) NSNumber*buildID;
 @property(copy,nonatomic) NSString*fullDisplayName;
 @property(copy,nonatomic) NSNumber*duration;
 @property(copy,nonatomic) NSNumber*timestamp;

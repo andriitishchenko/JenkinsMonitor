@@ -12,9 +12,13 @@
 NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 NSString * const userKey = @"jenkinsMonitorSave";
 
+#ifdef DEBUG
+NSTimeInterval const updateInterval = 10;
+#else
 NSTimeInterval const updateInterval = 60*3;
+#endif
 
-@interface Manager()
+@interface Manager()<NSUserNotificationCenterDelegate>
 
 - (void)timerFire:(id)sender;
 - (void)parceAndSave:(NSData*)data forKey:(NSString*)key;
@@ -34,6 +38,7 @@ NSTimeInterval const updateInterval = 60*3;
 - (id)init {
   if (self = [super init]) {
     self.jobList = [NSMutableDictionary new];
+    [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
     [self startService];
   }
   return self;
@@ -128,7 +133,17 @@ NSTimeInterval const updateInterval = 60*3;
     item.duration = [resultDict objectForKey:@"duration"];
     item.timestamp = [resultDict objectForKey:@"timestamp"];
     item.fullDisplayName = [resultDict objectForKey:@"fullDisplayName"];
-
+    
+    TableItem*item_old = [self.jobList objectForKey:job_url];
+    if (item_old.buildID) {
+      if ([item.buildID isEqual:item_old.buildID]) {  //if NOT new build
+        if (![item.result isEqual:[NSNull null]] &&   //if completed
+            ![item.result isEqual:item_old.result] && //if changed
+            ![item.result isEqualToString:@"SUCCESS"] ) { //if failed
+            [self showNotification:[NSString stringWithFormat:@"Build #%@ is %@",item_old.buildID,item.result] message: @""];
+        }
+      }
+    }
     [self.jobList setObject:item forKey:job_url];
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -149,5 +164,19 @@ NSTimeInterval const updateInterval = 60*3;
   self.jobList = nil;
 }
 
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center
+     shouldPresentNotification:(NSUserNotification *)notification {
+  return YES;
+}
+
+-(void)showNotification:(NSString*)title message:(NSString*)message{
+  NSUserNotification *notification = [[NSUserNotification alloc] init];
+  notification.title = title;
+  notification.informativeText = message;
+  notification.soundName = NSUserNotificationDefaultSoundName;
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+  });
+}
 
 @end

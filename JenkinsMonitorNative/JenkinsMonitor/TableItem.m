@@ -17,7 +17,7 @@
 -(instancetype)init{
   self = [super init];
   
-  self.buildID=@"";
+  self.buildID=nil;
   self.fullDisplayName=@"";
   self.timestamp=@(0);
   self.duration=@(0);
