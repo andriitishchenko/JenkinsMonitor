@@ -178,16 +178,22 @@
                 <userDefaultsController representsSharedInstance="YES" id="1e6-ot-Zs3"/>
                 <menu id="zCj-i4-URF">
                     <items>
-                        <menuItem title="Remove" id="lAd-8S-hHj">
+                        <menuItem title="Open URL" tag="100" id="lAd-8S-hHj">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
-                                <action selector="removeSelectedRow:" target="XfG-lQ-9wD" id="2zW-mo-4ad"/>
+                                <action selector="tableContextMenuAction:" target="XfG-lQ-9wD" id="kOE-7E-Rl1"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Download Build" hidden="YES" enabled="NO" id="Sok-zE-qj8">
+                        <menuItem title="Remove" tag="404" id="bTF-W9-K4c">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
-                                <action selector="removeSelectedRow:" target="XfG-lQ-9wD" id="h9r-xA-tPc"/>
+                                <action selector="tableContextMenuAction:" target="XfG-lQ-9wD" id="Nlk-AS-Llx"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Download Build" tag="200" hidden="YES" enabled="NO" id="Sok-zE-qj8">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="tableContextMenuAction:" target="XfG-lQ-9wD" id="LpI-4w-HOU"/>
                             </connections>
                         </menuItem>
                     </items>
