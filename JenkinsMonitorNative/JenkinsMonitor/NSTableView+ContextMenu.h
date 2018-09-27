@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 @protocol ContextMenuDelegate <NSObject>
-- (NSMenu*)tableView:(NSTableView*)aTableView menuForRows:(NSIndexSet*)rows;
+- (NSMenu *)tableView:(NSTableView *)aTableView menuForRows:(NSIndexSet *)rows;
 @end
 
 @interface NSTableView (ContextMenu)

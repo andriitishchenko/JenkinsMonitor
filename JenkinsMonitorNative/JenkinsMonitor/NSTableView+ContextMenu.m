@@ -9,8 +9,7 @@
 #import "NSTableView+ContextMenu.h"
 
 @implementation NSTableView (ContextMenu)
-- (NSMenu*)menuForEvent:(NSEvent*)event
-{
+- (NSMenu *)menuForEvent:(NSEvent *)event {
   NSPoint location = [self convertPoint:[event locationInWindow] fromView:nil];
   NSInteger row = [self rowAtPoint:location];
   if (!(row >= 0) || ([event type] != NSEventTypeRightMouseDown)) {

@@ -9,5 +9,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface CircleImage : NSImage
--(instancetype)initWithSize:(NSSize)size color:(NSColor*)color;
+- (instancetype)initWithSize:(NSSize)size color:(NSColor *)color;
 @end

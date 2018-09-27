@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface TableItem : NSObject
-@property(copy,nonatomic) NSString*result;
-@property(copy,nonatomic) NSNumber*buildID;
-@property(copy,nonatomic) NSString*fullDisplayName;
-@property(copy,nonatomic) NSNumber*duration;
-@property(copy,nonatomic) NSNumber*timestamp;
-@property(copy,nonatomic) NSString*url;
-- (const NSImage*) getIcon;
+@property(copy, nonatomic) NSString *result;
+@property(copy, nonatomic) NSNumber *buildID;
+@property(copy, nonatomic) NSString *fullDisplayName;
+@property(copy, nonatomic) NSNumber *duration;
+@property(copy, nonatomic) NSNumber *timestamp;
+@property(copy, nonatomic) NSString *url;
+- (const NSImage *)getIcon;
 
 @end
