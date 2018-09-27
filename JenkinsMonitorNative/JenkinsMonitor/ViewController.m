@@ -18,6 +18,9 @@
 @property (strong,nonatomic) NSMutableArray* datasource;
 @end
 
+const NSInteger CONTEXT_MENU_OPEN_URL = 100;
+const NSInteger CONTEXT_MENU_REMOVE = 404;
+
 @implementation ViewController
 
 -(void)viewWillAppear{
@@ -60,7 +63,25 @@
     self.tf_job_id.stringValue = @"";
 }
 
-- (IBAction)removeSelectedRow:(id)sender {
+- (IBAction)tableContextMenuAction:(NSMenuItem*)sender {
+  NSInteger tag=sender.tag;
+  switch (tag) {
+    case CONTEXT_MENU_OPEN_URL:
+      [self openUrl];
+      break;
+    case CONTEXT_MENU_REMOVE:
+      [self removeSelectedRow];
+      break;
+    default:  break;
+  }
+}
+
+- (void)openUrl {
+  TableItem*item = self.datasource[self.tb_stats.selectedRow];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:item.url]];
+}
+
+- (void)removeSelectedRow {
   [[Manager sharedManager] removeURLIndex:self.tb_stats.selectedRow];
   [self resetValues];
 }

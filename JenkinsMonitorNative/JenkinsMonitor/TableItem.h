@@ -14,7 +14,7 @@
 @property(copy,nonatomic) NSString*fullDisplayName;
 @property(copy,nonatomic) NSNumber*duration;
 @property(copy,nonatomic) NSNumber*timestamp;
-//-(NSImage*)getIcon;
+@property(copy,nonatomic) NSString*url;
 - (const NSImage*) getIcon;
 
 @end

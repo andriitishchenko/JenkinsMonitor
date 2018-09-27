@@ -13,7 +13,7 @@ NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 NSString * const userKey = @"jenkinsMonitorSave";
 
 #ifdef DEBUG
-NSTimeInterval const updateInterval = 10;
+NSTimeInterval const updateInterval = 10*3;
 #else
 NSTimeInterval const updateInterval = 60*3;
 #endif
@@ -52,9 +52,35 @@ NSTimeInterval const updateInterval = 60*3;
 }
 
 -(void)addURL:(NSString*)url{
-  if (url && [url isNotEqualTo:@""]) {
-    [self.jobList setObject:[TableItem new] forKey:url];
-    [self requestData:url];
+  if (url && [url length]>0) {
+    
+    NSURL*testURL = [NSURL URLWithString:url];
+    if (testURL) {
+      NSString* validStr = [testURL absoluteString];
+      if ([validStr hasSuffix:@"/"]) {
+        validStr = [validStr substringToIndex:[validStr length]-1];
+      }
+      
+      TableItem*item = [TableItem new];
+      item.url = validStr;
+      [self.jobList setObject: item forKey:validStr];
+      [self requestData: validStr];
+    }
+//
+//
+//
+//
+//    if (![url hasPrefix:@"http://"] &&
+//        ![url hasPrefix:@"https://"])
+//    {
+//
+//    }
+    
+//    NSString *functionURL = [[NSString stringWithFormat: @"%@/lastBuild/api/json",job_url] stringByStandardizingPath];
+    
+    
+    
+
   }
 }
 -(void)removeURLIndex:(NSInteger)index{
@@ -128,6 +154,7 @@ NSTimeInterval const updateInterval = 60*3;
   if (resultDict) {
     
     TableItem*item = [TableItem new];
+    item.url = job_url;
     item.buildID = [resultDict objectForKey:@"number"];
     item.result = [resultDict objectForKey:@"result"];
     item.duration = [resultDict objectForKey:@"duration"];
@@ -152,7 +179,7 @@ NSTimeInterval const updateInterval = 60*3;
   }
 }
 
-- (void) save{
+- (void)save {
   NSArray*list=[self.jobList allKeys];
   if ([list count]>0) {
     [[NSUserDefaults standardUserDefaults] setObject:list forKey:userKey];

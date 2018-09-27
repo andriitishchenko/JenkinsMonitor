@@ -18,7 +18,8 @@
   self = [super init];
   
   self.buildID=nil;
-  self.fullDisplayName=@"";
+  self.fullDisplayName=nil;
+  self.url=nil;
   self.timestamp=@(0);
   self.duration=@(0);
   self.result=nil;
