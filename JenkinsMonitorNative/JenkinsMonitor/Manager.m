@@ -27,7 +27,7 @@ NSTimeInterval const updateInterval = 60*3;
 @end
 
 @implementation Manager
-+ (Manager*)sharedManager{
++ (Manager*)sharedManager {
   static Manager *sharedMyManager = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
@@ -46,14 +46,14 @@ NSTimeInterval const updateInterval = 60*3;
   return self;
 }
 
--(void)load{
+-(void)load {
   NSArray *list = [[NSUserDefaults standardUserDefaults] objectForKey:userKey];
   for (NSString*url in list) {
     [self addURL:url];
   }
 }
 
--(void)addURL:(NSString*)url{
+-(void)addURL:(NSString*)url {
   if (url && [url length]>0) {
     
     NSURL*testURL = [NSURL URLWithString:url];
@@ -70,7 +70,7 @@ NSTimeInterval const updateInterval = 60*3;
     }
   }
 }
--(void)removeURLIndex:(NSInteger)index{
+-(void)removeURLIndex:(NSInteger)index {
   NSString* keyURL = [[self.jobList allKeys] objectAtIndex:index];
   [self.jobList removeObjectForKey:keyURL];
   [self save];
@@ -95,7 +95,7 @@ NSTimeInterval const updateInterval = 60*3;
   });
   __block NSInteger counter = [list count];
   [list enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
-    [self requestData:key onComplete:^{
+    [self requestData:key onComplete: ^{
       counter --;
       if (counter == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -197,7 +197,7 @@ NSTimeInterval const updateInterval = 60*3;
   return YES;
 }
 
--(void)showNotification:(NSString*)title message:(NSString*)message{
+-(void)showNotification:(NSString*)title message:(NSString*)message {
   NSUserNotification *notification = [[NSUserNotification alloc] init];
   notification.title = title;
   notification.informativeText = message;

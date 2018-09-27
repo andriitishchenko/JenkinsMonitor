@@ -53,7 +53,7 @@ static NSString * const k_cell_id = @"cell_id";
 }
 
 - (void) receiveNotification:(NSNotification *) notification {
-  if ([[notification name] isEqualToString:JobsUpdateNotification]){
+  if ([[notification name] isEqualToString:JobsUpdateNotification]) {
     [self resetValues];
   }
 }
