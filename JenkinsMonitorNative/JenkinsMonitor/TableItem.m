@@ -1,10 +1,10 @@
-//
-//  TableItem.m
-//  JenkinsMonitor
-//
-//  Created by Andrii Tishchenko on 9/25/18.
-//  Copyright © 2018 Andrii Tishchenko. All rights reserved.
-//
+  //
+  //  TableItem.m
+  //  JenkinsMonitor
+  //
+  //  Created by Andrii Tishchenko on 9/25/18.
+  //  Copyright © 2018 Andrii Tishchenko. All rights reserved.
+  //
 
 #import "TableItem.h"
 #import "CircleImage.h"
@@ -38,7 +38,7 @@
 
 -(NSString*)duration{
   NSDate *date = [NSDate dateWithTimeIntervalSince1970: [duration_ doubleValue]/1000];
-
+  
   NSDateFormatter* RFC3339DateFormatter = [[NSDateFormatter alloc] init];
   RFC3339DateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
   RFC3339DateFormatter.dateFormat = @"HH:mm:ss";

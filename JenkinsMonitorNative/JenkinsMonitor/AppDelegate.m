@@ -27,8 +27,6 @@
   _statusItem.toolTip = @"ctrl+click to QUIT";
   
   NSImage *icon = [NSImage imageNamed:@"icon_menu"];
-//  icon.template = YES;
-
   self.statusItem.button.image = icon;
   [self.statusItem setAction:@selector(itemClicked:)];
   
@@ -38,11 +36,27 @@
                                            selector:@selector(receiveNotification:)
                                                name:JobsUpdateNotification
                                              object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(receiveNotification:)
+                                               name:FetchDataStartNotification
+                                             object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(receiveNotification:)
+                                               name:FetchDataStopNotification
+                                             object:nil];
 }
 
 - (void) receiveNotification:(NSNotification *) notification {
   if ([[notification name] isEqualToString:JobsUpdateNotification]){
     
+  }
+  if ([[notification name] isEqualToString:FetchDataStartNotification]){
+    NSImage *icon = [NSImage imageNamed:@"icon_menu_active"];
+    self.statusItem.button.image = icon;
+  }
+  if ([[notification name] isEqualToString:FetchDataStopNotification]){
+    NSImage *icon = [NSImage imageNamed:@"icon_menu"];
+    self.statusItem.button.image = icon;
   }
 }
 

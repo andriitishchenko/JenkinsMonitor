@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A3A4841215D5BB700C70145 /* icon_menu_active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3A4840215D5BB600C70145 /* icon_menu_active@2x.png */; };
 		4A4FD8CB21542A6100011353 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4FD8CA21542A6100011353 /* AppDelegate.m */; };
 		4A4FD8CE21542A6100011353 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4FD8CD21542A6100011353 /* ViewController.m */; };
 		4A4FD8D021542A6200011353 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A4FD8CF21542A6200011353 /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A3A4840215D5BB600C70145 /* icon_menu_active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_menu_active@2x.png"; sourceTree = "<group>"; };
 		4A4FD8C621542A6100011353 /* JenkinsMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JenkinsMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4FD8C921542A6100011353 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4A4FD8CA21542A6100011353 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				4A4FD8DF21542B5100011353 /* icon.png */,
 				4AAF03B6215AF7A80074E67C /* NSTableView+ContextMenu.h */,
 				4AAF03B7215AF7A80074E67C /* NSTableView+ContextMenu.m */,
+				4A3A4840215D5BB600C70145 /* icon_menu_active@2x.png */,
 				4A4FD8DD21542B4700011353 /* icon_menu@2x.png */,
 				4AAF03B0215AC6430074E67C /* TableItem.h */,
 				4AAF03B1215AC6430074E67C /* TableItem.m */,
@@ -164,6 +167,7 @@
 				4A4FD8D021542A6200011353 /* Assets.xcassets in Resources */,
 				4A4FD8DE21542B4800011353 /* icon_menu@2x.png in Resources */,
 				4A4FD8D321542A6200011353 /* Main.storyboard in Resources */,
+				4A3A4841215D5BB700C70145 /* icon_menu_active@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

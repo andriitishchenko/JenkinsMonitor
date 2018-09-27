@@ -1,10 +1,10 @@
-//
-//  ViewController.m
-//  JenkinsMonitor
-//
-//  Created by Andrii Tishchenko on 9/20/18.
-//  Copyright © 2018 Andrii Tishchenko. All rights reserved.
-//
+  //
+  //  ViewController.m
+  //  JenkinsMonitor
+  //
+  //  Created by Andrii Tishchenko on 9/20/18.
+  //  Copyright © 2018 Andrii Tishchenko. All rights reserved.
+  //
 
 #import "ViewController.h"
 #import "Manager.h"
@@ -21,35 +21,36 @@
 const NSInteger CONTEXT_MENU_OPEN_URL = 100;
 const NSInteger CONTEXT_MENU_REMOVE = 404;
 
+static NSString * const k_cell_status = @"cell_status";
+static NSString * const k_cell_job = @"cell_job";
+static NSString * const k_cell_timestamp = @"cell_timestamp";
+static NSString * const k_cell_duration = @"cell_duration";
+static NSString * const k_cell_id = @"cell_id";
+
 @implementation ViewController
 
--(void)viewWillAppear{
+-(void)viewWillAppear {
   [super viewWillAppear];
-  
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(receiveNotification:)
                                                name:JobsUpdateNotification
                                              object:nil];
-  
   [self resetValues];
 }
 
--(void)resetValues{
+-(void)resetValues {
   NSDictionary* list = [[[Manager sharedManager] jobList]  copy];
-  
   [self.datasource removeAllObjects];
   [list enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
     [self.datasource addObject:value];
   }];
-  
   [self.tb_stats reloadData];
 }
 
--(void)viewWillDisappear{
+-(void)viewWillDisappear {
   [super viewWillDisappear];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
 
 - (void) receiveNotification:(NSNotification *) notification {
   if ([[notification name] isEqualToString:JobsUpdateNotification]){
@@ -58,9 +59,9 @@ const NSInteger CONTEXT_MENU_REMOVE = 404;
 }
 
 - (IBAction)click_add:(id)sender {
-    [[Manager sharedManager] addURL: self.tf_job_id.stringValue];
-    [[Manager sharedManager] save];
-    self.tf_job_id.stringValue = @"";
+  [[Manager sharedManager] addURL: self.tf_job_id.stringValue];
+  [[Manager sharedManager] save];
+  self.tf_job_id.stringValue = @"";
 }
 
 - (IBAction)tableContextMenuAction:(NSMenuItem*)sender {
@@ -86,45 +87,41 @@ const NSInteger CONTEXT_MENU_REMOVE = 404;
   [self resetValues];
 }
 
-
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.datasource = [NSMutableArray new];
 }
 
-
 - (void)setRepresentedObject:(id)representedObject {
   [super setRepresentedObject:representedObject];
 }
 
--(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
+-(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
   return [self.datasource count];
 }
 
-
--(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   TableItem*item = self.datasource[row];
   NSString* key=[tableColumn identifier];
-  if ([key isEqualToString:@"cell_status"]) {
+  if ([key isEqualToString:k_cell_status]) {
     return [item getIcon];
   }
-  else if ([key isEqualToString:@"cell_job"]) {
+  else if ([key isEqualToString:k_cell_job]) {
     return item.fullDisplayName;
   }
-  else if ([key isEqualToString:@"cell_timestamp"]) {
+  else if ([key isEqualToString:k_cell_timestamp]) {
     return item.timestamp;
   }
-  else if ([key isEqualToString:@"cell_duration"]) {
+  else if ([key isEqualToString:k_cell_duration]) {
     return item.duration;
   }
-  else if ([key isEqualToString:@"cell_id"]) {
+  else if ([key isEqualToString:k_cell_id]) {
     return item.buildID;
   }
-  
   return @"NaN";
 }
 
-- (NSMenu*)tableView:(NSTableView*)aTableView menuForRows:(NSIndexSet*)rows{
+- (NSMenu*)tableView:(NSTableView*)aTableView menuForRows:(NSIndexSet*)rows {
   return aTableView.menu;
 }
 

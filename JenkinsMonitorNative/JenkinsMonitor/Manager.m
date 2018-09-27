@@ -1,13 +1,16 @@
-//
-//  Manager.m
-//  JenkinsMonitor
-//
-//  Created by Andrii Tishchenko on 9/21/18.
-//  Copyright © 2018 Andrii Tishchenko. All rights reserved.
-//
+  //
+  //  Manager.m
+  //  JenkinsMonitor
+  //
+  //  Created by Andrii Tishchenko on 9/21/18.
+  //  Copyright © 2018 Andrii Tishchenko. All rights reserved.
+  //
 
 #import "Manager.h"
 #import "TableItem.h"
+
+NSString * const FetchDataStartNotification = @"FetchDataStartNotification";
+NSString * const FetchDataStopNotification = @"FetchDataStopNotification";
 
 NSString * const JobsUpdateNotification = @"JobsUpdateNotification";
 NSString * const userKey = @"jenkinsMonitorSave";
@@ -19,11 +22,9 @@ NSTimeInterval const updateInterval = 60*3;
 #endif
 
 @interface Manager()<NSUserNotificationCenterDelegate>
-
 - (void)timerFire:(id)sender;
 - (void)parceAndSave:(NSData*)data forKey:(NSString*)key;
 @end
-
 
 @implementation Manager
 + (Manager*)sharedManager{
@@ -34,6 +35,7 @@ NSTimeInterval const updateInterval = 60*3;
   });
   return sharedMyManager;
 }
+
 
 - (id)init {
   if (self = [super init]) {
@@ -64,23 +66,8 @@ NSTimeInterval const updateInterval = 60*3;
       TableItem*item = [TableItem new];
       item.url = validStr;
       [self.jobList setObject: item forKey:validStr];
-      [self requestData: validStr];
+      [self requestData: validStr onComplete:nil];
     }
-//
-//
-//
-//
-//    if (![url hasPrefix:@"http://"] &&
-//        ![url hasPrefix:@"https://"])
-//    {
-//
-//    }
-    
-//    NSString *functionURL = [[NSString stringWithFormat: @"%@/lastBuild/api/json",job_url] stringByStandardizingPath];
-    
-    
-    
-
   }
 }
 -(void)removeURLIndex:(NSInteger)index{
@@ -103,12 +90,23 @@ NSTimeInterval const updateInterval = 60*3;
     return;
   }
   
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSNotificationCenter defaultCenter] postNotificationName:FetchDataStartNotification object:self];
+  });
+  __block NSInteger counter = [list count];
   [list enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
-      [self requestData:key];
+    [self requestData:key onComplete:^{
+      counter --;
+      if (counter == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [[NSNotificationCenter defaultCenter] postNotificationName:FetchDataStopNotification object:self];
+        });
+      }
+    }];
   }];
 }
 
--(void)requestData:(NSString*)job_url {
+-(void)requestData:(NSString*)job_url onComplete:(void (^)(void))onComplete {
   NSString* functionURL = [NSString stringWithFormat: @"%@/lastBuild/api/json",job_url];
   NSURL *url = [NSURL URLWithString:functionURL];
   NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url
@@ -118,9 +116,13 @@ NSTimeInterval const updateInterval = 60*3;
                                                              } else {
                                                                [self parceAndSave:data forKey:job_url];
                                                              }
+                                                             if (onComplete) {
+                                                               onComplete();
+                                                             }
                                                            }];
   [task resume];
 }
+
 
 /*
  JSON
@@ -152,7 +154,6 @@ NSTimeInterval const updateInterval = 60*3;
                                                              options: NSJSONReadingMutableContainers
                                                                error:&e];
   if (resultDict) {
-    
     TableItem*item = [TableItem new];
     item.url = job_url;
     item.buildID = [resultDict objectForKey:@"number"];
@@ -167,12 +168,12 @@ NSTimeInterval const updateInterval = 60*3;
         if (![item.result isEqual:[NSNull null]] &&   //if completed
             ![item.result isEqual:item_old.result] && //if changed
             ![item.result isEqualToString:@"SUCCESS"] ) { //if failed
-            [self showNotification:[NSString stringWithFormat:@"Build #%@ is %@",item_old.buildID,item.result] message: @""];
+          [self showNotification:[NSString stringWithFormat:@"Build #%@ is %@",item_old.buildID,item.result] message: @""];
         }
       }
     }
     [self.jobList setObject:item forKey:job_url];
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       [[NSNotificationCenter defaultCenter] postNotificationName:JobsUpdateNotification object:self];
     });
